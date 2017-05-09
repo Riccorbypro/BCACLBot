@@ -18,21 +18,21 @@ public class Bot extends org.telegram.telegrambots.bots.TelegramLongPollingBot {
                 Message message = update.getMessage();
                 if (message.hasText() && !message.isCommand()) {
                     String text = message.getText();
-                    
+
                 } else if (message.hasText() && message.isCommand()) {
-                    
+
+                } else if (message.hasDocument()) {
+
                 }
             }
         } catch (Exception e) {
             System.err.println(e);
-        }        
+        }
     }
 
     @Override
     public String getBotUsername() {
         return Config.BOT_USERNAME;
     }
-    
-    
-    
+
 }
