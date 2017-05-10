@@ -7,20 +7,17 @@ public class Cluster {
 
     private int clusterID;
     private String clusterName;
-    private ArrayList<User> members;
     private String dropboxLink;
 
-    public Cluster(int clusterID, String clusterName, ArrayList<User> members, String dropboxLink) {
+    public Cluster(int clusterID, String clusterName, String dropboxLink) {
         this.clusterID = clusterID;
         this.clusterName = clusterName;
-        this.members = members;
         this.dropboxLink = dropboxLink;
     }
 
-    public Cluster(int clusterID, String clusterName, ArrayList<User> members) {
+    public Cluster(int clusterID, String clusterName) {
         this.clusterID = clusterID;
         this.clusterName = clusterName;
-        this.members = members;
     }
 
     public int getClusterID() {
@@ -39,24 +36,12 @@ public class Cluster {
         this.clusterName = clusterName;
     }
 
-    public ArrayList<User> getMembers() {
-        return members;
-    }
-
-    public void setMembers(ArrayList<User> members) {
-        this.members = members;
-    }
-
     public String getDropboxLink() {
         return dropboxLink;
     }
 
     public void setDropboxLink(String dropboxLink) {
         this.dropboxLink = dropboxLink;
-    }
-
-    public void addMember(User member) {
-        members.add(member);
     }
 
 }

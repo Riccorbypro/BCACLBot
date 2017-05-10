@@ -21,7 +21,7 @@ public class Bot extends TelegramLongPollingCommandBot {
     Connect conn = new Connect();
 
     public Bot() {
-        register(new Register());
+        register(new Register(conn));
         HelpCommand helpCommand = new HelpCommand(this);
         register(helpCommand);
         registerDefaultAction((absSender, message) -> {
@@ -96,7 +96,7 @@ public class Bot extends TelegramLongPollingCommandBot {
                 rs = conn.query("SELECT * FROM clusters WHERE `clusterID`=?", clusterID);
                 Cluster c = null;
                 while (rs.next()) {
-                    c = new Cluster(rs.getInt("clusterID"), rs.getString("clusterName"), new ArrayList<>(), rs.getString("dropboxLink"));
+                    c = new Cluster(rs.getInt("clusterID"), rs.getString("clusterName"), rs.getString("dropboxLink"));
                 }
                 return c;
             } else {

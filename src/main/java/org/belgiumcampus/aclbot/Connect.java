@@ -13,7 +13,7 @@ public class Connect {
     public Connect() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://belgiumcampusacl", "campus", "\"L8t09908G{3O0X");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/belgiumcampusacl", "campus", "\"L8t09908G{3O0X");
         } catch (Exception e) {
             System.err.println("ERROR: " + e);
         }
