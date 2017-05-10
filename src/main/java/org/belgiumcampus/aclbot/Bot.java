@@ -1,6 +1,9 @@
 package org.belgiumcampus.aclbot;
 
+import org.telegram.telegrambots.api.methods.GetFile;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.telegrambots.api.objects.Document;
+import org.telegram.telegrambots.api.objects.File;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 
@@ -22,7 +25,14 @@ public class Bot extends org.telegram.telegrambots.bots.TelegramLongPollingBot {
                 } else if (message.hasText() && message.isCommand()) {
 
                 } else if (message.hasDocument()) {
-
+                    Document document = message.getDocument();
+                    String fileID = document.getFileId();
+                    GetFile getfile = new GetFile();
+                    getfile.setFileId(fileID);
+                    File file = getFile(getfile);
+                    Runnable dropbox = new Dropbox(file.getFilePath());
+                    Thread thread = new Thread(dropbox);
+                    thread.start();
                 }
             }
         } catch (Exception e) {
