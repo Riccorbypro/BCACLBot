@@ -5,20 +5,17 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.swing.JOptionPane;
 
 public class Connect {
 
     private Connection conn;
 
-    public Connect(String path) {
+    public Connect() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://" + path, "username", "password");
+            conn = DriverManager.getConnection("jdbc:mysql://belgiumcampusacl", "campus", "\"L8t09908G{3O0X");
         } catch (Exception e) {
-            System.out.println("ERROR: " + e);
-            JOptionPane.showMessageDialog(null, "ERROR:\nCode: LC20");
-            System.exit(1);
+            System.err.println("ERROR: " + e);
         }
     }
 
@@ -26,9 +23,7 @@ public class Connect {
         try {
             conn.close();
         } catch (Exception e) {
-            System.out.println("ERROR: " + e);
-            JOptionPane.showMessageDialog(null, "ERROR:\nCode: LC29");
-            System.exit(1);
+            System.err.println("ERROR: " + e);
         }
     }
 
@@ -43,9 +38,7 @@ public class Connect {
             }
             rs = ps.executeQuery();
         } catch (SQLException ex) {
-            System.out.println("ERROR: " + ex);
-            JOptionPane.showMessageDialog(null, "ERROR:\nCode: LC40");
-            System.exit(1);
+            System.err.println("ERROR: " + ex);
         }
         return rs;
     }
@@ -61,9 +54,7 @@ public class Connect {
             }
             result = ps.execute();
         } catch (SQLException ex) {
-            System.out.println("ERROR: " + ex);
-            JOptionPane.showMessageDialog(null, "ERROR:\nCode: LC52");
-            System.exit(1);
+            System.err.println("ERROR: " + ex);
         }
         return result;
     }
@@ -79,9 +70,7 @@ public class Connect {
             }
             result = ps.executeUpdate();
         } catch (SQLException ex) {
-            System.out.println("ERROR: " + ex);
-            JOptionPane.showMessageDialog(null, "ERROR:\nCode: LC64");
-            System.exit(1);
+            System.err.println("ERROR: " + ex);
         }
         return result;
     }
