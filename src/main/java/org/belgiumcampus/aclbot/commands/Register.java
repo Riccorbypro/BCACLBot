@@ -3,13 +3,10 @@ package org.belgiumcampus.aclbot.commands;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.belgiumcampus.aclbot.Cluster;
 import org.belgiumcampus.aclbot.Connect;
 import org.belgiumcampus.aclbot.Group;
 import org.belgiumcampus.aclbot.Student;
-import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Chat;
 import org.telegram.telegrambots.api.objects.User;
@@ -86,12 +83,18 @@ public class Register extends BotCommand {
                             String message = "You have been registered as:\n"
                                     + student.getFirstName() + " " + student.getSurname() + ".\nYou are in ACL Group "
                                     + student.getGroup().getGroupNo() + " " + student.getGroup().getTimeslot()
-                                    + "\n\nYou are part of Cluster " + student.getGroup().getCluster().getClusterName()
-                                    + "\n\nYou will be working with:\n";
-                            for (Student member : student.getGroup().getMembers()) {
-                                message += "\n";
-                                message += member.getFirstName() + " " + member.getSurname();
+                                    + "\n\nYou are part of Cluster " + student.getGroup().getCluster().getClusterName();
+
+                            if (student.getGroup().getMembers().size() > 0) {
+                                message += "\n\nYou will be working with:\n";;
+                                for (Student member : student.getGroup().getMembers()) {
+                                    message += "\n";
+                                    message += member.getFirstName() + " " + member.getSurname();
+                                }
                             }
+
+                            notifyOtherGroupMembers(student, student.getGroup().getMembers(), as);
+
                             SendMessage answer = new SendMessage();
                             answer.setChatId(chat.getId().toString());
                             answer.setText(message);
@@ -168,6 +171,19 @@ public class Register extends BotCommand {
         boolean result = conn.insert("INSERT INTO `students`(`telegramID`, `chatID`, `firstName`, `surname`, `groupID`, `leader`) VALUES (?, ?, ?, ?, ?, ?);",
                 student.getTelegramID(), student.getChatID(), student.getFirstName(), student.getSurname(), student.getGroup().getGroupID(), false);
         return result;
+    }
+
+    private void notifyOtherGroupMembers(Student student, ArrayList<Student> members, AbsSender as) {
+        for (Student member : members) {
+            SendMessage message = new SendMessage();
+            message.setChatId(member.getChatID());
+            message.setText(student.getFirstName() + " " + student.getSurname() + " just joined your group.");
+            try {
+                as.sendMessage(message);
+            } catch (TelegramApiException ex) {
+                System.err.println(ex);
+            }
+        }
     }
 
 }

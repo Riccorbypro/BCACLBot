@@ -2,10 +2,10 @@ package org.belgiumcampus.aclbot;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Date;
 import org.belgiumcampus.aclbot.commands.HelpCommand;
 import org.belgiumcampus.aclbot.commands.Register;
+import org.belgiumcampus.aclbot.commands.Start;
 import org.telegram.telegrambots.api.methods.GetFile;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Document;
@@ -22,6 +22,7 @@ public class Bot extends TelegramLongPollingCommandBot {
 
     public Bot() {
         register(new Register(conn));
+        register(new Start());
         HelpCommand helpCommand = new HelpCommand(this);
         register(helpCommand);
         registerDefaultAction((absSender, message) -> {
