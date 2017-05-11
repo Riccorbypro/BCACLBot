@@ -26,10 +26,15 @@ public class Bot extends TelegramLongPollingCommandBot {
         HelpCommand helpCommand = new HelpCommand(this);
         register(helpCommand);
         registerDefaultAction((absSender, message) -> {
-            if (processFile(message)) {
+            if (processFile(message) != null) {
                 SendMessage fileReceived = new SendMessage();
                 fileReceived.setChatId(message.getChatId().toString());
                 fileReceived.setText("File has been received and is being processed. Thank you for your submission.");
+                try {
+                    absSender.sendMessage(fileReceived);
+                } catch (TelegramApiException ex) {
+                    System.err.println(ex);
+                }
             } else {
                 SendMessage commandUnknownMessage = new SendMessage();
                 commandUnknownMessage.setChatId(message.getChatId());
@@ -54,7 +59,7 @@ public class Bot extends TelegramLongPollingCommandBot {
         return Config.BOT_USERNAME;
     }
 
-    public boolean processFile(Message message) {
+    public SendMessage processFile(Message message) {
         if (message.hasDocument()) {
             Cluster c = getClusterFromUser(message.getFrom());
             if (c != null) {
@@ -68,7 +73,10 @@ public class Bot extends TelegramLongPollingCommandBot {
                     Runnable dropbox = new Dropbox(file.getFileUrl(Config.BOT_TOKEN), document.getFileName(), null);
                     Thread thread = new Thread(dropbox);
                     thread.start();
-                    return true;
+                    SendMessage sm = new SendMessage();
+                    sm.setChatId(message.getChatId().toString());
+                    sm.setText("File received. Thank you for your submission.");
+                    return sm;
                 } catch (TelegramApiException ex) {
                     System.err.println(ex);
                 }
@@ -76,14 +84,15 @@ public class Bot extends TelegramLongPollingCommandBot {
                 SendMessage sm = new SendMessage();
                 sm.setChatId(message.getChatId().toString());
                 sm.setText("You are not part of a cluster. Please /register.\n\nIf you have registered, please contact @Riccorbypro or @R34P3R for support.");
-                return false;
+                return sm;
             }
         }
-        return false;
+        return null;
     }
 
     @Override
     public void processNonCommandUpdate(Update update) {
+
     }
 
     private Cluster getClusterFromUser(User from) {

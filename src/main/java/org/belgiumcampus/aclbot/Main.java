@@ -1,7 +1,5 @@
 package org.belgiumcampus.aclbot;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
