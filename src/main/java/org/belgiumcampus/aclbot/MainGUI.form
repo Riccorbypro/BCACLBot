@@ -79,11 +79,17 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Start Bot"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="startButtActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="stopButt">
       <Properties>
         <Property name="text" type="java.lang.String" value="Stop Bot"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="stopButtActionPerformed"/>
+      </Events>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
       <AuxValues>
@@ -132,6 +138,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Group Editor"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="groupEditButtActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

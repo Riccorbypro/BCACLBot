@@ -5,17 +5,33 @@
  */
 package org.belgiumcampus.aclbot;
 
+import org.telegram.telegrambots.ApiContextInitializer;
+import org.telegram.telegrambots.TelegramBotsApi;
+import org.telegram.telegrambots.exceptions.TelegramApiException;
+
 /**
  *
  * @author Richard
  */
 public class MainGUI extends javax.swing.JFrame {
 
-    /**
-     * Creates new form MainGUI
-     */
+    private Thread mainThread;
+
     public MainGUI() {
         initComponents();
+        Runnable run = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    ApiContextInitializer.init();
+                    TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
+                    telegramBotsApi.registerBot(new Bot());
+                } catch (TelegramApiException ex) {
+                    System.err.println(ex);
+                }
+            }
+        };
+        mainThread = new Thread(run);
     }
 
     /**
@@ -40,8 +56,18 @@ public class MainGUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         startButt.setText("Start Bot");
+        startButt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                startButtActionPerformed(evt);
+            }
+        });
 
         stopButt.setText("Stop Bot");
+        stopButt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                stopButtActionPerformed(evt);
+            }
+        });
 
         notificationArea.setColumns(20);
         notificationArea.setLineWrap(true);
@@ -59,6 +85,11 @@ public class MainGUI extends javax.swing.JFrame {
         logLbl.setText("Log");
 
         groupEditButt.setText("Group Editor");
+        groupEditButt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                groupEditButtActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -105,6 +136,18 @@ public class MainGUI extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void groupEditButtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_groupEditButtActionPerformed
+
+    }//GEN-LAST:event_groupEditButtActionPerformed
+
+    private void startButtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtActionPerformed
+        mainThread.start();
+    }//GEN-LAST:event_startButtActionPerformed
+
+    private void stopButtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopButtActionPerformed
+        mainThread.stop();
+    }//GEN-LAST:event_stopButtActionPerformed
 
     /**
      * @param args the command line arguments
