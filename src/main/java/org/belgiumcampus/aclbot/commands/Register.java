@@ -82,7 +82,7 @@ public class Register extends BotCommand {
                         if (!registerStudent(student)) {
                             String message = "You have been registered as:\n"
                                     + student.getFirstName() + " " + student.getSurname() + ".\nYour username is: "
-                                    + user.getUserName() + "\nYou are in ACL Group "
+                                    + student.getUsername() + "\nYou are in ACL Group "
                                     + student.getGroup().getGroupNo() + " " + student.getGroup().getTimeslot()
                                     + "\n\nYou are part of Cluster " + student.getGroup().getCluster().getClusterName();
 
@@ -90,7 +90,7 @@ public class Register extends BotCommand {
                                 message += "\n\nYou will be working with:\n";;
                                 for (Student member : student.getGroup().getMembers()) {
                                     message += "\n";
-                                    message += member.getFirstName() + " " + member.getSurname();
+                                    message += member.getFirstName() + " " + member.getSurname() + " (" + member.getUsername() + ")";
                                 }
                             }
 
@@ -99,6 +99,7 @@ public class Register extends BotCommand {
                             SendMessage answer = new SendMessage();
                             answer.setChatId(chat.getId().toString());
                             answer.setText(message);
+                            System.out.println("New Registration: " + student.getFirstName() + " " + student.getSurname() + " (" + student.getUsername() + ")");
                             try {
                                 as.sendMessage(answer);
                             } catch (TelegramApiException ex) {
@@ -107,7 +108,7 @@ public class Register extends BotCommand {
                         }
                     }
                 } else {
-                    String message = "Please check that your group and timeslot are correct.";
+                    String message = "Registration Failed! Please check that your group and timeslot are correct.";
                     SendMessage answer = new SendMessage();
                     answer.setChatId(chat.getId().toString());
                     answer.setText(message);
@@ -119,7 +120,7 @@ public class Register extends BotCommand {
                 }
             } catch (Exception ex) {
                 System.err.println(ex);
-                String message = "Please check that your group and timeslot are correct.";
+                String message = "Registration Failed! Please check that your group and timeslot are correct.";
                 SendMessage answer = new SendMessage();
                 answer.setChatId(chat.getId().toString());
                 answer.setText(message);

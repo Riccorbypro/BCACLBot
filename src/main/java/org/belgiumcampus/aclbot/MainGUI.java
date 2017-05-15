@@ -5,6 +5,9 @@
  */
 package org.belgiumcampus.aclbot;
 
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.util.Date;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
@@ -16,9 +19,25 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 public class MainGUI extends javax.swing.JFrame {
 
     private Thread mainThread;
+    private Bot bot;
 
     public MainGUI() {
         initComponents();
+        LogArea.setText("");
+        PrintStream outStream = new PrintStream(System.out) {
+            @Override
+            public void println(String x) {
+                LogArea.append("[INFO] " + new Date(System.currentTimeMillis()) + ": " + x + "\n");
+            }
+        };
+        PrintStream errStream = new PrintStream(System.err) {
+            @Override
+            public void println(String x) {
+                LogArea.append("[ERROR] " + new Date(System.currentTimeMillis()) + ": " + x + "\n");
+            }
+        };
+        System.setErr(errStream);
+        System.setOut(outStream);
     }
 
     /**
@@ -41,6 +60,7 @@ public class MainGUI extends javax.swing.JFrame {
         groupEditButt = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         startButt.setText("Start Bot");
         startButt.addActionListener(new java.awt.event.ActionListener() {
@@ -138,13 +158,14 @@ public class MainGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_groupEditButtActionPerformed
 
     private void startButtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtActionPerformed
+        bot = new Bot();
         Runnable run = new Runnable() {
             @Override
             public void run() {
                 try {
                     ApiContextInitializer.init();
                     TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
-                    telegramBotsApi.registerBot(new Bot());
+                    telegramBotsApi.registerBot(bot);
                 } catch (TelegramApiException ex) {
                     System.err.println(ex);
                 }

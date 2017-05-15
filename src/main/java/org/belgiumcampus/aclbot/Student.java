@@ -49,7 +49,7 @@ public class Student {
     }
 
     public String getUsername() {
-        if (username != "null") {
+        if (!username.toLowerCase().equals("null")) {
             return "@" + username;
         } else {
             return "No Username";
@@ -57,7 +57,7 @@ public class Student {
     }
 
     public String getUsernameNoAt() {
-        if (username != "null") {
+        if (!username.toLowerCase().equals("null")) {
             return username;
         } else {
             return "No Username";
