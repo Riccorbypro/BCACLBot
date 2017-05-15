@@ -78,10 +78,11 @@ public class Register extends BotCommand {
                     timeslot = arguments[pos].toUpperCase();
                     Group groupObj = null;
                     if ((groupObj = checkGroup(group, timeslot)) != null) {
-                        Student student = new Student(user.getId(), chat.getId(), firstName, surname, groupObj);
+                        Student student = new Student(user.getId(), chat.getId(), firstName, surname, user.getUserName(), groupObj);
                         if (!registerStudent(student)) {
                             String message = "You have been registered as:\n"
-                                    + student.getFirstName() + " " + student.getSurname() + ".\nYou are in ACL Group "
+                                    + student.getFirstName() + " " + student.getSurname() + ".\nYour username is: "
+                                    + user.getUserName() + "\nYou are in ACL Group "
                                     + student.getGroup().getGroupNo() + " " + student.getGroup().getTimeslot()
                                     + "\n\nYou are part of Cluster " + student.getGroup().getCluster().getClusterName();
 
@@ -153,7 +154,7 @@ public class Register extends BotCommand {
         }
         rs = conn.query("SELECT * FROM `students` WHERE `groupID`=?", g.getGroupID());
         while (rs.next()) {
-            g.addMember(new Student(rs.getInt("telegramID"), rs.getLong("chatID"), rs.getString("firstName"), rs.getString("surname"), g));
+            g.addMember(new Student(rs.getInt("telegramID"), rs.getLong("chatID"), rs.getString("firstName"), rs.getString("surname"), rs.getString("username"), g));
         }
         return g;
     }
@@ -168,8 +169,8 @@ public class Register extends BotCommand {
     }
 
     private boolean registerStudent(Student student) {
-        boolean result = conn.insert("INSERT INTO `students`(`telegramID`, `chatID`, `firstName`, `surname`, `groupID`, `leader`) VALUES (?, ?, ?, ?, ?, ?);",
-                student.getTelegramID(), student.getChatID(), student.getFirstName(), student.getSurname(), student.getGroup().getGroupID(), false);
+        boolean result = conn.insert("INSERT INTO `students`(`telegramID`, `chatID`, `firstName`, `surname`, `username`, `groupID`, `leader`) VALUES (?, ?, ?, ?, ?, ?, ?);",
+                student.getTelegramID(), student.getChatID(), student.getFirstName(), student.getSurname(), student.getUsernameNoAt(), student.getGroup().getGroupID(), false);
         return result;
     }
 
@@ -177,7 +178,7 @@ public class Register extends BotCommand {
         for (Student member : members) {
             SendMessage message = new SendMessage();
             message.setChatId(member.getChatID());
-            message.setText(student.getFirstName() + " " + student.getSurname() + " just joined your group.");
+            message.setText(student.getFirstName() + " " + student.getSurname() + " (" + student.getUsername() + ") just joined your group.");
             try {
                 as.sendMessage(message);
             } catch (TelegramApiException ex) {
