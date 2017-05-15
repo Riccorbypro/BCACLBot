@@ -19,19 +19,6 @@ public class MainGUI extends javax.swing.JFrame {
 
     public MainGUI() {
         initComponents();
-        Runnable run = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    ApiContextInitializer.init();
-                    TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
-                    telegramBotsApi.registerBot(new Bot());
-                } catch (TelegramApiException ex) {
-                    System.err.println(ex);
-                }
-            }
-        };
-        mainThread = new Thread(run);
     }
 
     /**
@@ -63,6 +50,7 @@ public class MainGUI extends javax.swing.JFrame {
         });
 
         stopButt.setText("Stop Bot");
+        stopButt.setEnabled(false);
         stopButt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 stopButtActionPerformed(evt);
@@ -138,44 +126,46 @@ public class MainGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void groupEditButtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_groupEditButtActionPerformed
-
+        Runnable runner = new Runnable() {
+            @Override
+            public void run() {
+                GroupEditorGUI geg = new GroupEditorGUI();
+                geg.setVisible(true);
+            }
+        };
+        Thread gegThread = new Thread(runner);
+        gegThread.start();
     }//GEN-LAST:event_groupEditButtActionPerformed
 
     private void startButtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtActionPerformed
+        Runnable run = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    ApiContextInitializer.init();
+                    TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
+                    telegramBotsApi.registerBot(new Bot());
+                } catch (TelegramApiException ex) {
+                    System.err.println(ex);
+                }
+            }
+        };
+        mainThread = new Thread(run);
         mainThread.start();
+        stopButt.setEnabled(true);
+        startButt.setEnabled(false);
     }//GEN-LAST:event_startButtActionPerformed
 
     private void stopButtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopButtActionPerformed
         mainThread.stop();
+        stopButt.setEnabled(false);
+        startButt.setEnabled(true);
     }//GEN-LAST:event_stopButtActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
