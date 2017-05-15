@@ -11,11 +11,12 @@ package org.belgiumcampus.aclbot;
  */
 public class GroupEditorGUI extends javax.swing.JFrame {
 
-    /**
-     * Creates new form GroupEditorGUI
-     */
+    private GroupBackend gb;
+    
     public GroupEditorGUI() {
         initComponents();
+        gb = new GroupBackend();
+        groupsLst.setListData(gb.getGroups());
     }
 
     /**
