@@ -10,13 +10,14 @@ package org.belgiumcampus.aclbot;
  * @author Richard
  */
 public class GroupEditorGUI extends javax.swing.JFrame {
-
+    
     private GroupBackend gb;
     
     public GroupEditorGUI() {
         initComponents();
         gb = new GroupBackend();
         groupsLst.setListData(gb.getGroups());
+        clustersLst.setListData(gb.getClusters());
     }
 
     /**
@@ -40,7 +41,7 @@ public class GroupEditorGUI extends javax.swing.JFrame {
         viewGroupButt = new javax.swing.JButton();
         viewClusterButt = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
 
         nameLbl.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
@@ -72,7 +73,7 @@ public class GroupEditorGUI extends javax.swing.JFrame {
 
         viewGroupButt.setText("View Group Members");
 
-        viewClusterButt.setText("View Cluster Members");
+        viewClusterButt.setText("View Cluster Dropbox");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -123,6 +124,7 @@ public class GroupEditorGUI extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     /**

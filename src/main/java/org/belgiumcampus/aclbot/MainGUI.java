@@ -19,7 +19,6 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 public class MainGUI extends javax.swing.JFrame {
 
     private Thread mainThread;
-    private Bot bot;
 
     public MainGUI() {
         initComponents();
@@ -143,6 +142,7 @@ public class MainGUI extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void groupEditButtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_groupEditButtActionPerformed
@@ -158,14 +158,13 @@ public class MainGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_groupEditButtActionPerformed
 
     private void startButtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtActionPerformed
-        bot = new Bot();
         Runnable run = new Runnable() {
             @Override
             public void run() {
                 try {
                     ApiContextInitializer.init();
                     TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
-                    telegramBotsApi.registerBot(bot);
+                    telegramBotsApi.registerBot(new Bot());
                 } catch (TelegramApiException ex) {
                     System.err.println(ex);
                 }
